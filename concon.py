@@ -62,8 +62,9 @@ def define_constrained_subtype(prefix, base, blockednames, clsdict=None):
 
     clsdict = clsdict or {}
 
-    if '__doc__' not in clsdict:
-        clsdict['__doc__'] = 'An %s extension of %s.' % (prefix, base.__name__)
+    doc = clsdict.get('__doc__', '')
+    doc = 'An %s extension of %s.\n%s' % (prefix, base.__name__, doc)
+    clsdict['__doc__'] = doc
 
     for bname in blockednames:
         setitem_without_overwrite(clsdict, bname, ConstraintError.block(getattr(base, bname)))
