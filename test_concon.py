@@ -21,6 +21,9 @@ class SetItemWithoutOverwriteTests (unittest.TestCase):
             setitem_without_overwrite(d, 'a', 'applause')
         except OverwriteError, e:
             self.assertEqual(e.args, ('a', 'applause', 'apple'))
+            self.assertEqual(
+                str(e),
+                "Attempted overwrite of key 'a' with new value 'applause' overwriting old value 'apple'")
         else:
             self.fail('setitem_without_overwrite allowed overwrite: %r' % (d,))
 
