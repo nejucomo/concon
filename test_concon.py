@@ -7,7 +7,7 @@ import unittest
 from concon import ConstraintError, OverwriteError
 from concon import frozendict, frozenlist
 from concon import appendonlydict, appendonlylist, appendonlyset
-from concon import define_constrained_subtype, setitem_without_overwrite, update_without_overwrite
+from concon import setitem_without_overwrite, update_without_overwrite
 
 
 class SetItemWithoutOverwriteTests (unittest.TestCase):
@@ -28,6 +28,23 @@ class SetItemWithoutOverwriteTests (unittest.TestCase):
                 "Attempted overwrite of key 'a' with new value 'applause' overwriting old value 'apple'")
         else:
             self.fail('setitem_without_overwrite allowed overwrite: %r' % (d,))
+
+    def test__update_without_overwrite__no_overwrite(self):
+        d = {'a': 'apple'}
+        update_without_overwrite(d, {'b': 'banana'})
+        self.assertEqual(d, {'a': 'apple', 'b': 'banana'})
+
+    def test__update_without_overwrite__with_overwrite(self):
+        d = {'a': 'apple'}
+        try:
+            update_without_overwrite(d, {'a': 'applause'})
+        except OverwriteError, e:
+            self.assertEqual(e.args, ('a', 'applause', 'apple'))
+            self.assertEqual(
+                str(e),
+                "Attempted overwrite of key 'a' with new value 'applause' overwriting old value 'apple'")
+        else:
+            self.fail('update_without_overwrite allowed overwrite: %r' % (d,))
 
 
 class BlockedMethodsTests (unittest.TestCase):
