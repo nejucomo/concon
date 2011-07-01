@@ -4,7 +4,10 @@ from distutils.core import setup
 
 setup(name = 'concon',
       description = 'CONstrained CONtainers: immutable and append-only container subclasses and utilities.',
-      author = 'Nathan Wilcox <nejucomo@gmail.com>',
+      url = 'https://bitbucket.org/nejucomo/concon',
       license = 'MIT (see LICENSE.txt)',
+      version = '0.1',
+      author = 'Nathan Wilcox',
+      author_email = 'nejucomo@gmail.com',
       py_modules = ['concon'],
       )
