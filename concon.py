@@ -104,7 +104,7 @@ def setitem_without_overwrite(d, key, value):
         dict.__setitem__(d, key, value)
 
 
-def update_without_overwrite(d, other=(), **kwds):
+def update_without_overwrite(d, *args, **kwds):
     """
     This has the same interface as dict.update except it uses
     setitem_without_overwrite for all updates.
@@ -112,15 +112,19 @@ def update_without_overwrite(d, other=(), **kwds):
     Note: The implementation is derived from
     collections.MutableMapping.update.
     """
-    if isinstance(other, Mapping):
-        for key in other:
-            setitem_without_overwrite(d, key, other[key])
-    elif hasattr(other, "keys"):
-        for key in other.keys():
-            setitem_without_overwrite(d, key, other[key])
-    else:
-        for key, value in other:
-            setitem_without_overwrite(d, key, value)
+    if args:
+        assert len(args) == 1, 'At most one positional parameter is allowed: {0!r}'.format(args)
+        (other,) = args
+        if isinstance(other, Mapping):
+            for key in other:
+                setitem_without_overwrite(d, key, other[key])
+        elif hasattr(other, "keys"):
+            for key in other.keys():
+                setitem_without_overwrite(d, key, other[key])
+        else:
+            for key, value in other:
+                setitem_without_overwrite(d, key, value)
+
     for key, value in kwds.items():
         setitem_without_overwrite(d, key, value)
 
