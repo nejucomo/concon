@@ -46,6 +46,27 @@ class SetItemWithoutOverwriteTests (unittest.TestCase):
         else:
             self.fail('update_without_overwrite allowed overwrite: %r' % (d,))
 
+    def test__update_without_overwrite__with_NonMappingWithKeysAndGetItem(self):
+        class NonMappingWithKeysAndGetItem (object):
+            def keys(self):
+                return ['a', 'b', 'c']
+            def __getitem__(self, key):
+                return 42
+
+        d = {}
+        update_without_overwrite(d, NonMappingWithKeysAndGetItem())
+        self.assertEqual(d, {'a': 42, 'b': 42, 'c': 42})
+
+    def test__update_without_overwrite__with_keyvalue_sequence(self):
+        d = {}
+        update_without_overwrite(d, [('a', 0), ('b', 1), ('c', 2)])
+        self.assertEqual(d, {'a': 0, 'b': 1, 'c': 2})
+
+    def test__update_without_overwrite__with_keywords(self):
+        d = {}
+        update_without_overwrite(d, a=0, b=1, c=2)
+        self.assertEqual(d, {'a': 0, 'b': 1, 'c': 2})
+
 
 class BlockedMethodsTests (unittest.TestCase):
 
