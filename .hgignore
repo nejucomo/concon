@@ -1,4 +1,5 @@
-^MANIFEST
+^VERSION$
+^MANIFEST$
 ^dist
 \.coverage
 ^htmlcov
