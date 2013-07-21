@@ -9,15 +9,6 @@ echo 'pyflakes completed.'
 
 
 echo -e '\n=== Running unittests ==='
-TRIAL=$(which trial)
-
-if ! [ -x "$TRIAL" ];
-then
-    echo 'Could not find trial; it is in the Twisted package.'
-    exit -1
-fi
-
-
 coverage run --branch ./concon.py --verbose
 STATUS=$?
 
