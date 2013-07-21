@@ -174,15 +174,7 @@ class SetItemWithoutOverwriteTests (unittest.TestCase):
 
     def test__setitem_without_overwrite__with_overwrite(self):
         d = {'a': 'apple'}
-        try:
-            setitem_without_overwrite(d, 'a', 'applause')
-        except OverwriteError, e:
-            self.assertEqual(e.args, ('a', 'applause', 'apple'))
-            self.assertEqual(
-                str(e),
-                "Attempted overwrite of key 'a' with new value 'applause' overwriting old value 'apple'")
-        else:
-            self.fail('setitem_without_overwrite allowed overwrite: %r' % (d,))
+        self.assertRaises(OverwriteError, setitem_without_overwrite, d, 'a', 'applause')
 
     def test__update_without_overwrite__no_overwrite(self):
         d = {'a': 'apple'}
@@ -191,15 +183,7 @@ class SetItemWithoutOverwriteTests (unittest.TestCase):
 
     def test__update_without_overwrite__with_overwrite(self):
         d = {'a': 'apple'}
-        try:
-            update_without_overwrite(d, {'a': 'applause'})
-        except OverwriteError, e:
-            self.assertEqual(e.args, ('a', 'applause', 'apple'))
-            self.assertEqual(
-                str(e),
-                "Attempted overwrite of key 'a' with new value 'applause' overwriting old value 'apple'")
-        else:
-            self.fail('update_without_overwrite allowed overwrite: %r' % (d,))
+        self.assertRaises(OverwriteError, update_without_overwrite, d, {'a': 'applause'})
 
     def test__update_without_overwrite__with_NonMappingWithKeysAndGetItem(self):
         class NonMappingWithKeysAndGetItem (object):
@@ -245,15 +229,15 @@ class BlockedMethodsTests (unittest.TestCase):
     def _check_blocked_methods(self, obj):
         for name in obj.get_blocked_method_names():
             method = getattr(obj, name)
-            try:
-                r = method(42)
-            except ConstraintError, e:
-                self.assertEqual(e.args, (obj, name, (42,), {}))
-                self.assertEqual(
-                    str(e),
-                    "Attempt to call %r.%s (42,) {} violates constraint." % (obj, name))
-            else:
-                self.fail('Blocked method %r.%s returned %r' % (obj, name, r))
+            self.assertRaises(ConstraintError, method, 42)
+
+
+class ContraintErrorTests (unittest.TestCase):
+
+    def test___str__(self):
+        error = ConstraintError(None, 'foo', ('blah', 42), dict(wombat='awesome!'))
+        self.assertRegexpMatches(str(error), r'^Attempt to call .* violates constraint\.$')
+
 
 
 
