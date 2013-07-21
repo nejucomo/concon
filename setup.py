@@ -33,5 +33,5 @@ setup(name = 'concon',
       version = version,
       author = 'Nathan Wilcox',
       author_email = 'nejucomo@gmail.com',
-      py_modules = ['concon', 'test_concon'],
+      py_modules = ['concon'],
       )
