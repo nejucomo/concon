@@ -1,3 +1,9 @@
+2.0
+===
+
+* Bumped the version to be large enough to supercede the old 1.<HG HASH>
+  style versions.  New releases will always use PEP 0440 compliant versions.
+
 0.2
 ===
 

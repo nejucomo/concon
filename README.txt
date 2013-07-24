@@ -40,3 +40,15 @@ Traceback (most recent call last):
   File "/home/n/virtualenvs/default/lib/python2.7/site-packages/concon.py", line 37, in blocked_method
     raise cls(self, method.__name__, a, kw)
 concon.ConstraintError: Attempt to call ['a', 'b', 'c'].__setitem__ (2, 42) {} violates constraint.
+
+
+Upgrading
+---------
+
+Note, the old versioning scheme included distributed packages with
+versions of the format `1.<LONG HEXADECIMAL HASH>`.  The latest release
+is 2.0 which should supercede the previous versioning scheme for
+setuptools-style dependency requirements.  New releases will always use
+`PEP 0440`_ compliant versions.
+
+.. _`PEP 0440`: http://www.python.org/dev/peps/pep-0440/
