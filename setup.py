@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import sys
-from distutils.core import setup
+from setuptools import setup
 
 
 if 'upload' in sys.argv:
@@ -9,12 +9,13 @@ if 'upload' in sys.argv:
         raise SystemExit('Refusing to upload unsigned packages.')
 
 
-setup(name = 'concon',
-      description = 'CONstrained CONtainers: immutable and append-only container subclasses and utilities.',
-      url = 'https://bitbucket.org/nejucomo/concon',
-      license = 'MIT (see LICENSE.txt)',
-      version = '2.0',
-      author = 'Nathan Wilcox',
-      author_email = 'nejucomo@gmail.com',
-      py_modules = ['concon'],
-      )
+setup(
+    name='concon',
+    description='CONstrained CONtainers: immutable & append-only containers.',
+    url='https://github.com/nejucomo/concon',
+    license='MIT (see LICENSE.txt)',
+    version='2.1.dev0',
+    author='Nathan Wilcox',
+    author_email='nejucomo@gmail.com',
+    py_modules=['concon'],
+)

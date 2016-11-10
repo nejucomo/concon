@@ -16,7 +16,7 @@ import unittest
 from collections import Mapping
 
 
-## General Constraint abstractions:
+# I. General Constraint abstractions
 
 class ConstraintError (TypeError):
     """
@@ -67,15 +67,23 @@ def define_constrained_subtype(prefix, base, blockednames, clsdict=None):
     doc = 'An %s extension of %s.\n%s' % (prefix, base.__name__, doc)
     clsdict['__doc__'] = doc
 
-    setitem_without_overwrite(clsdict, 'get_blocked_method_names', lambda self: iter(blockednames))
+    setitem_without_overwrite(
+        clsdict,
+        'get_blocked_method_names',
+        lambda self: iter(blockednames),
+    )
 
     for bname in blockednames:
-        setitem_without_overwrite(clsdict, bname, ConstraintError.block(getattr(base, bname)))
+        setitem_without_overwrite(
+            clsdict,
+            bname,
+            ConstraintError.block(getattr(base, bname)),
+        )
 
     return type(name, (base,), clsdict)
 
 
-## Overwrite utilities:
+# II. Overwrite utilities
 
 class OverwriteError (ConstraintError, KeyError):
     """
@@ -83,7 +91,8 @@ class OverwriteError (ConstraintError, KeyError):
     append-only structure occurs.
     """
 
-    Template = 'Attempted overwrite of key %r with new value %r overwriting old value %r'
+    Template = ('Attempted overwrite of key %r with '
+                'new value %r overwriting old value %r')
 
     def __init__(self, key, newvalue, oldvalue):
         KeyError.__init__(self, key, newvalue, oldvalue)
@@ -114,7 +123,9 @@ def update_without_overwrite(d, *args, **kwds):
     collections.MutableMapping.update.
     """
     if args:
-        assert len(args) == 1, 'At most one positional parameter is allowed: {0!r}'.format(args)
+        assert len(args) == 1, \
+            'At most one positional parameter is allowed: {0!r}'.format(args)
+
         (other,) = args
         if isinstance(other, Mapping):
             for key in other:
@@ -130,9 +141,9 @@ def update_without_overwrite(d, *args, **kwds):
         setitem_without_overwrite(d, key, value)
 
 
-## Concrete Constrained Containers:
+# III. Concrete Constrained Containers
 
-frozenset = frozenset # Promote this builtin to module scope for consistency.
+frozenset = frozenset  # Promote this builtin to module scope for consistency.
 
 frozenlist = define_constrained_subtype(
     'frozen', list,
@@ -162,33 +173,44 @@ appendonlydict = define_constrained_subtype(
      'update': update_without_overwrite})
 
 
-
-## Unittests
+# IV. Unittests
 
 class SetItemWithoutOverwriteTests (unittest.TestCase):
 
-    def test__setitem_without_overwrite__no_overwrite(self):
+    def test_setitem_without_overwrite__no_overwrite(self):
         d = {'a': 'apple'}
         setitem_without_overwrite(d, 'b', 'banana')
         self.assertEqual(d, {'a': 'apple', 'b': 'banana'})
 
-    def test__setitem_without_overwrite__with_overwrite(self):
+    def test_setitem_without_overwrite__with_overwrite(self):
         d = {'a': 'apple'}
-        self.assertRaises(OverwriteError, setitem_without_overwrite, d, 'a', 'applause')
+        self.assertRaises(
+            OverwriteError,
+            setitem_without_overwrite,
+            d,
+            'a',
+            'applause',
+        )
 
-    def test__update_without_overwrite__no_overwrite(self):
+    def test_update_without_overwrite__no_overwrite(self):
         d = {'a': 'apple'}
         update_without_overwrite(d, {'b': 'banana'})
         self.assertEqual(d, {'a': 'apple', 'b': 'banana'})
 
-    def test__update_without_overwrite__with_overwrite(self):
+    def test_update_without_overwrite__with_overwrite(self):
         d = {'a': 'apple'}
-        self.assertRaises(OverwriteError, update_without_overwrite, d, {'a': 'applause'})
+        self.assertRaises(
+            OverwriteError,
+            update_without_overwrite,
+            d,
+            {'a': 'applause'},
+        )
 
-    def test__update_without_overwrite__with_NonMappingWithKeysAndGetItem(self):
+    def test_update_without_overwrite__with_NonMappingWithKeysAndGetItem(self):
         class NonMappingWithKeysAndGetItem (object):
             def keys(self):
                 return ['a', 'b', 'c']
+
             def __getitem__(self, key):
                 return 42
 
@@ -196,12 +218,12 @@ class SetItemWithoutOverwriteTests (unittest.TestCase):
         update_without_overwrite(d, NonMappingWithKeysAndGetItem())
         self.assertEqual(d, {'a': 42, 'b': 42, 'c': 42})
 
-    def test__update_without_overwrite__with_keyvalue_sequence(self):
+    def test_update_without_overwrite__with_keyvalue_sequence(self):
         d = {}
         update_without_overwrite(d, [('a', 0), ('b', 1), ('c', 2)])
         self.assertEqual(d, {'a': 0, 'b': 1, 'c': 2})
 
-    def test__update_without_overwrite__with_keywords(self):
+    def test_update_without_overwrite__with_keywords(self):
         d = {}
         update_without_overwrite(d, a=0, b=1, c=2)
         self.assertEqual(d, {'a': 0, 'b': 1, 'c': 2})
@@ -234,12 +256,14 @@ class BlockedMethodsTests (unittest.TestCase):
 
 class ContraintErrorTests (unittest.TestCase):
 
-    def test___str__(self):
-        error = ConstraintError(None, 'foo', ('blah', 42), dict(wombat='awesome!'))
-        self.assertRegexpMatches(str(error), r'^Attempt to call .* violates constraint\.$')
-
-
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test__str__(self):
+        error = ConstraintError(
+            None,
+            'foo',
+            ('blah', 42),
+            dict(wombat='awesome!'),
+        )
+        self.assertRegexpMatches(
+            str(error),
+            r'^Attempt to call .* violates constraint\.$',
+        )
