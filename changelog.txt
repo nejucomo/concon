@@ -1,3 +1,11 @@
+2.0.dev0
+========
+
+* Switched from distutils to setuptools.
+* Switched from hg to git.
+* Minimal changes to pass onslaught, eg PEP8 checks.
+* Maintained full unittest coverage (no regressions).
+
 2.0
 ===
 

@@ -1,1 +1,3 @@
-include *.txt
+include changelog.txt
+include LICENSE.txt
+include README.txt
