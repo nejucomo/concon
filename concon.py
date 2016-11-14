@@ -23,10 +23,10 @@ class ConstraintError (TypeError):
     ConstraintError is the base Exception type for any violation of
     some constraint.
     """
-    Template = 'Attempt to call %r.%s %r %r violates constraint.'
+    Template = 'Attempt to call {!r}.{} {!r} {!r} violates constraint.'
 
     def __str__(self):
-        return self.Template % self.args
+        return self.Template.format(*self.args)
 
     @classmethod
     def block(cls, method):
@@ -64,7 +64,7 @@ def define_constrained_subtype(prefix, base, blockednames, clsdict=None):
     clsdict = clsdict or {}
 
     doc = clsdict.get('__doc__', '')
-    doc = 'An %s extension of %s.\n%s' % (prefix, base.__name__, doc)
+    doc = 'An {} extension of {}.\n{}'.format(prefix, base.__name__, doc)
     clsdict['__doc__'] = doc
 
     setitem_without_overwrite(
@@ -91,8 +91,8 @@ class OverwriteError (ConstraintError, KeyError):
     append-only structure occurs.
     """
 
-    Template = ('Attempted overwrite of key %r with '
-                'new value %r overwriting old value %r')
+    Template = ('Attempted overwrite of key {!r} with '
+                'new value {!r} overwriting old value {!r}')
 
     def __init__(self, key, newvalue, oldvalue):
         KeyError.__init__(self, key, newvalue, oldvalue)
