@@ -9,13 +9,16 @@ if 'upload' in sys.argv:
         raise SystemExit('Refusing to upload unsigned packages.')
 
 
+pkg = 'concon'
+
+
 setup(
-    name='concon',
+    name=pkg,
     description='CONstrained CONtainers: immutable & append-only containers.',
-    url='https://github.com/nejucomo/concon',
+    url='https://github.com/nejucomo/{}'.format(pkg),
     license='MIT (see LICENSE.txt)',
     version='2.0.1',
     author='Nathan Wilcox',
     author_email='nejucomo@gmail.com',
-    py_modules=['concon'],
+    py_modules=[pkg],
 )
