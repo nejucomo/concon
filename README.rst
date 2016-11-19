@@ -1,7 +1,7 @@
 Synopsis
 ========
 
-`concon` (short for **con**strained **con**tainers) provides usefully
+`concon` (short for **con**\ strained **con**\ tainers) provides usefully
 constrained container subtypes:
 
 * ``frozenlist``
