@@ -14,7 +14,7 @@ setup(
     description='CONstrained CONtainers: immutable & append-only containers.',
     url='https://github.com/nejucomo/concon',
     license='MIT (see LICENSE.txt)',
-    version='2.1.dev0',
+    version='2.0.1',
     author='Nathan Wilcox',
     author_email='nejucomo@gmail.com',
     py_modules=['concon'],
